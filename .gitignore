@@ -1,0 +1,67 @@
+#w
+# NOTE! Don't add files that are generated in specific
+# subdirectories here. Add them in the ".gitignore" file
+# in that subdirectory instead.
+#
+# Normal rules
+#
+.*
+*~
+*.a
+*.d
+*.o
+*.hex
+*.map
+*.lst
+*.elf
+*.swp
+*.bin
+*.patch
+*.cxf
+
+#
+# git files that we don't want to ignore even it they are dot-files
+#
+!.gitignore
+!.mailmap
+
+# Libero SOC FPGA project depended files
+/*/hw_platform/filelist
+/*/hw_platform/README.txt
+
+# files and directories in soc-platform repository
+/*/hw_platform/CMSIS
+/*/hw_platform/drivers
+/*/hw_platform/hal
+/*/fw_platform
+/*/bootloader
+/*/FreeRTOS
+/*/include
+firmware/scripts/
+firmware_platform.ewp
+hardware_platform.ewp
+freertos.ewp
+*bootloader.*
+
+# IAR EWARM generated files
+*.dep
+*.ewt
+*.pbd
+*.pbd.browse
+*.pbi
+*.pbi.cout
+*.out
+/*/project/*/settings
+/*/project/*/debug
+
+# Keil uVision generated files
+*.scvd
+*.i
+*.crf
+*.lnp
+*.axf
+*.build_log
+
+# files in temporary directory
+tmp/
+temp/
