@@ -27,8 +27,8 @@ int main()
 
 	printf("\r\nNvram test is running\r\n");
 	printf("\r\n");
-        /*nvmdata ≥ı ºªØ*/
-	nvmdata_initialize(); 
+
+	nvmdata_initialize();
 
 
 	create_tasks();

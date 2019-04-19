@@ -140,11 +140,6 @@ int console(void)
 			nvm_rw_test();
 			printf("nvm read is ok\n\r");
 			break;
-			ddr_memory_test();
-		case '6':
-			ddr_memory_test();
-			printf("ddr write is ok\n\r");
-			break;
 		default:
 			print_cmderror((cp-cmdbuf), "invalid command\n");
 		}

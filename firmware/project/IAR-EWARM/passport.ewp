@@ -1967,9 +1967,6 @@
       <name>$PROJ_DIR$\..\..\application\console.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\application\ddr_test.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\application\indicator.c</name>
     </file>
     <file>

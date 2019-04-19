@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\multiboxes.ewp</path>
+    <path>$WS_DIR$\passport.ewp</path>
   </project>
   <project>
     <path>$WS_DIR$\firmware_platform.ewp</path>
