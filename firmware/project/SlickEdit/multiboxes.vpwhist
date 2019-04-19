@@ -1,0 +1,224 @@
+[Global]
+CurrentProject=multiboxes.vpj
+[ProjectDates]
+multiboxes.vpj=20190319082305396
+[ActiveConfig]
+multiboxes.vpj=Debug
+[TreeExpansion2]
+-@ multiboxes.vpj
+  - Source Files
+  + Header Files
+  + Resource Files
+  + Bitmaps
+  + Other Files
+scroll:0
+[State]
+SCREEN: 1366 768 1589 114 1242 688 0 0 N 0 0 0 0 900 406 0
+CWD: ..\SlickEdit
+BUFFER: BN="..\..\application\test.c"""""
+BI: MA=1 74 1  TABS= WWS=9 IWT= ST=8 IN=2 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=C/C++	HM=0 MF=119603808 TL=0 MLL=0 ASE=0 LNL=1 LCF=6 CAPS=0 E=70 ESBU2=-1 CL="" SC="" SCE= SCU= ALM=0 FWRM=0 HMRE=0 HMRBW=0 SPCWT=0 SWF=2
+VIEW: LN=.216 CL=33 LE=0 CX=32 CY=15 WI=5 BI=1 HT=0 HN=0 HF=0 HC=4
+WINDOW: 1 22 898 383 0 0 N  WF=0 WT=2 "Default Unicode Font,10,0,1" DID=0
+BUFFER: BN="..\..\application\test.c"""""
+VIEW: LN=.216 CL=33 LE=0 CX=37 CY=15 WI=15 BI=1 HT=0 HN=0 HF=0 HC=4
+MDISTATE: 1
+AAAAAwAAAAIAAAAC2gAAAAIAMAAAAAAAAAA1AAAE2QAAApkAAAAAAAAAAAAABVUAAALXAAAAAuoAAADKAAAAAvsAAAABAAAAAQAAAAD7AAAAAQAAAAEAAAAA/AAAAKcAAAAAmgAyADoAOgA6AEQAOgBcAHcAbwByAGsAXAAyADAAMQA5AFwA5QCkAJoA5wClAKgA5wCuALEA5QCUAK4A5QCNAJYA6QChALkA5wCbAK4AXABtAHUAbAB0AGkAYgBvAHgAZQBzAFwAZgBpAHIAbQB3AGEAcgBlAFwAYQBwAHAAbABpAGMAYQB0AGkAbwBuAFwAdABlAHMAdAAuAGMBAP////8AAQAAAADaAAAAHgAwAC0AMQA1ADQAMgA5ADUANQAzADAAMQAzADAAMABOAAAB+AAAACMAAAOVAAACngAAAAAAAAAAAAAFVQAAAtcAAAAC6gAAABYAAAAC+wAAAAAAAAAA+wAAAAAAAAAAAAAAAA==
+FILEHIST: 9
+\soc\cardscanner\firmware\I2C_test\nvram_test.c
+\soc\cardscanner\firmware\I2C_test\console.c
+\soc\cardscanner\firmware\application\appl_main.c
+\soc\cardscanner\firmware\nvram_test\test.c
+\soc\cardscanner\firmware\nvram_test\nvram_test.c
+\soc\cardscanner\firmware\nvram_test\console.c
+\soc\cardscanner\firmware\application\console.c
+\soc\cardscanner\firmware\application\tasks.c
+..\..\application\test.c
+ALLFILEHIST: 64
+..\..\application\test.c
+\soc\cardscanner\firmware\nvram_test\test.c
+\soc\cardscanner\firmware\I2C_test\test.c
+\soc\cardscanner\firmware\application\tasks.c
+\soc\cardscanner\firmware\application\supervisor.c
+\soc\cardscanner\firmware\application\scanner.h
+\soc\cardscanner\firmware\application\scanner.c
+\soc\cardscanner\firmware\application\scancalib.c
+\soc\cardscanner\firmware\nvram_test\nvram_test.c
+\soc\cardscanner\firmware\I2C_test\nvram_test.c
+\soc\cardscanner\firmware\fw_platform\nvram\nvram.h
+\soc\cardscanner\firmware\fw_platform\nvram\nvram.c
+\soc\cardscanner\firmware\application\nvmdata.h
+\soc\platform\fw_platform\nvram\nvmapi.c
+\soc\cardscanner\firmware\fw_platform\nvram\nvmapi.c
+\soc\cardscanner\firmware\hw_platform\drivers\mss_i2c\mss_i2c.h
+\soc\cardscanner\firmware\hw_platform\drivers\mss_i2c\mss_i2c.c
+..\..\..\..\..\..\2018\身份证扫描模块\SF2_IAR_MSS_I2C_master_slave\SF2_IAR_MSS_I2C_master_slave\main.c
+\soc\cardscanner\firmware\project\IAR-EWARM\M2S050.icf
+\soc\cardscanner\firmware\application\indicator.c
+\soc\FreeRTOSv7.0\FreeRTOS\Demo\CORTEX_STM32F103_IAR\FreeRTOSConfig.h
+\soc\FreeRTOS\Source\FreeRTOSv9.0.0\FreeRTOS\Demo\CORTEX_STM32F103_IAR\FreeRTOSConfig.h
+\soc\FreeRTOS\Source\FreeRTOSv9.0.0\FreeRTOS\Demo\CORTEX_SmartFusion2_M2S050_SoftConsole\RTOSDemo\FreeRTOSConfig.h
+\soc\Smart_fs2Project\FreeRTOS\inc\FreeRTOS.h
+\soc\FreeRTOSv7.0\FreeRTOS\Source\include\FreeRTOS.h
+\soc_test\cardscanner\firmware\fw_platform\motor\fpga_stepmotor.c
+\soc\cardscanner\firmware\fw_platform\motor\fpga_stepmotor.c
+\soc_platform\cardscanner\firmware\fw_platform\fpga_io.h
+\soc_test\cardscanner\firmware\fw_platform\scanunit\fpga_cis.c
+\soc\cardscanner\firmware\fw_platform\scanunit\fpga_cis.c
+\soc_test\cardscanner\firmware\fw_platform\fpga\fpga.c
+\soc\cardscanner\firmware\fw_platform\fpga\fpga.c
+\soc\FreeRTOS\Source\FreeRTOSv9.0.0\FreeRTOS\Demo\CORTEX_SmartFusion2_M2S050_SoftConsole\RTOSDemo\Full-Demo\File-system-demo.c
+\soc_platform\cardscanner\firmware\include\debug.h
+\soc\cardscanner\firmware\include\debug.h
+\soc\cardscanner\firmware\fw_platform\motor\dcmotor.h
+\soc_test\cardscanner\firmware\fw_platform\motor\dcmotor.c
+\soc\cardscanner\firmware\fw_platform\motor\dcmotor.c
+\soc_test\cardscanner\firmware\hw_platform\drivers\CorePWM\core_pwm.h
+\soc_platform\cardscanner\firmware\hw_platform\drivers\CoreGPIO\core_gpio.c
+\soc_test\cardscanner\firmware\application\console.c
+\soc_platform\voucher_test\firmware\application\console.c
+\soc_platform\cardscanner\firmware\application\console.c
+\soc\cardscanner\firmware\nvram_test\console.c
+\soc\cardscanner\firmware\I2C_test\console.c
+\soc\cardscanner\firmware\application\console.c
+\soc\FreeRTOSv9.0\FreeRTOSv9.0.0\FreeRTOSv9.0.0\FreeRTOS\Demo\CORTEX_SmartFusion2_M2S050_SoftConsole\RTOSDemo\Full-Demo\FreeRTOS-Plus-FAT-SL-Source\config\config_mdriver_ram_template.h
+\soc\cardscanner\firmware\bootloader\command.c
+\soc_platform\cardscanner\firmware\application\cmd_scan.c
+\soc_platform\cardscanner\firmware\application\cmd_cardpath_test.c
+\soc_test\cardscanner\firmware\application\card_scanpath_dev_lib.c
+\soc_platform\voucher_test\firmware\application\card_scanpath_dev_lib.c
+\soc\cardscanner\firmware\config\board_config_test.c
+\soc_test\cardscanner\firmware\config\board_config.c
+\soc_platform\voucher_test\firmware\config\board_config.c
+\soc_platform\cardscanner\firmware\config\board_config.c
+\soc\cardscanner\firmware\config\board_config.c
+\soc\cardscanner\firmware\fw_platform\nvram\at24cxx.h
+\soc\cardscanner\firmware\fw_platform\nvram\at24cxx.c
+\soc_test\cardscanner\firmware\application\appl_main.c
+\soc_test\application\appl_main.c
+\soc_platform\cardscanner\firmware\application\appl_main.c
+\soc_platform\application\appl_main.c
+\soc\cardscanner\firmware\application\appl_main.c
+DEBUG: 0 0 0 0 5 0 gdb
+printf
+strcpy
+strcmp
+std::*
+boost::*
+DEBUG2: 0
+TBCLASS: 0 0
+STANDARD_LAYOUT: 57 1 40 11 5 N 0
+_tbFTPClient_form F=0
+_tbfind_symbol_form F=32
+_tbsearch_form F=8
+_tbbookmarks_form F=8
+_tbdebug_watches_form F=64
+_tbfind_form F=36
+_tbdeltasave_form F=0
+_tbnotification_form F=36
+_tbclass_form F=8
+_tbderivedclasses_form F=40
+_tbbaseclasses_form F=40
+_tbdebug_memory_form F=64
+_tbdebug_classes_form F=64
+_tbdebug_threads_form F=64
+_tbopen_form F=40
+_tbbufftabs_form F=11
+_tbdebug_members_form F=64
+_tbannotations_browser_form F=0
+_tbsymbolcalls_form F=40
+_tbunittest_form F=0
+_tbmessages_browser_form F=8
+_tbregex_form F=40
+_tbdebug_exceptions_form F=384
+_tboutputwin_form F=8
+_tbtagrefs_form F=8
+_tbtagwin_form F=8
+_tbprops_form F=8
+_tbslickc_stack_form F=8
+_tbfilelist_form F=44
+_tbFTPOpen_form F=0
+_tbclipboard_form F=44
+_tbdebug_breakpoints_form F=384
+_tbdebug_regs_form F=64
+_tbdebug_autovars_form F=64
+_tbdebug_locals_form F=64
+_tbdebug_stack_form F=64
+_tbshell_form F=8
+_tbprojects_form F=8
+_tbproctree_form F=8
+_tbcbrowser_form F=8
+_tbprojects_form T=0
+_tbcbrowser_form T=0
+_tbmessages_browser_form T=0
+_tbclass_form T=0
+_tbtagwin_form T=0
+_tbsearch_form T=0
+_tbproctree_form T=0
+_tbshell_form T=0
+_tbopen_form T=0
+_tboutputwin_form T=0
+_tbtagrefs_form T=0
+AAAAAwAAAAEAAAAC2gAAAAIAMAAAAAAAAAA1AAAE2QAAApkAAAAAAAAAAAAABVUAAALXAAAAAesAAARwAAAAAPsAAAACAAAAAgAAAAEAAAAA+wAAAAIAAAACAAAAAAAAAAH9AAABoQAAAAAaADoAOgA6AC8AdgBEAG8AYwBrAEEAcgBlAGEBAAAAAVEAAAAAAAL7AAAABQAAAAUAAAAAAAAABAAAAAEAAAACAAAAA/sAAAAFAAAABQAAAAAAAAABAAAAAgAAAAMAAAAE/AAAAD0AAAAAKAAwADoAOgA6AF8AdABiAHAAcgBvAGoAZQBjAHQAcwBfAGYAbwByAG0BAP////8AAP///////////AAAAD0AAAAAKAAwADoAOgA6AF8AdABiAHAAcgBvAGMAdAByAGUAZQBfAGYAbwByAG0AAP////8AAP///////////AAAADcAAAAAIgAwADoAOgA6AF8AdABiAGMAbABhAHMAcwBfAGYAbwByAG0AAP////8AAP///////////AAAAD0AAAAAKAAwADoAOgA6AF8AdABiAGMAYgByAG8AdwBzAGUAcgBfAGYAbwByAG0AAP////8AAP///////////AAAADUAAAAAIAAwADoAOgA6AF8AdABiAG8AcABlAG4AXwBmAG8AcgBtAAD/////AAD///////////0AAAJ7AAAAABoAOgA6ADoALwB2AEQAbwBjAGsAQQByAGUAYQEAAAAGKgABAAAAAfsAAAACAAAAAgAAAAAAAAAB+wAAAAIAAAACAAAAAQAAAAD8AAAAKQAAAAAcADoAOgA6AE0ARABJAEEAUgBFAEEAVABJAEwARQEAAAABqAAB/QAAAfsAAAAAGgA6ADoAOgAvAHYARABvAGMAawBBAHIAZQBhAQAAAADKAAAAAAAC+wAAAAYAAAAGAAAAAwAAAAIAAAAFAAAAAAAAAAEAAAAE+wAAAAYAAAAGAAAAAAAAAAEAAAACAAAAAwAAAAQAAAAF/AAAADkAAAAAJAAwADoAOgA6AF8AdABiAHMAZQBhAHIAYwBoAF8AZgBvAHIAbQAA/////wAA///////////8AAAAOQAAAAAkADAAOgA6ADoAXwB0AGIAdABhAGcAdwBpAG4AXwBmAG8AcgBtAAD/////AAD///////////wAAAA7AAAAACYAMAA6ADoAOgBfAHQAYgB0AGEAZwByAGUAZgBzAF8AZgBvAHIAbQAA/////wAA///////////8AAAANwAAAAAiADAAOgA6ADoAXwB0AGIAcwBoAGUAbABsAF8AZgBvAHIAbQEA/////wAA///////////8AAAATQAAAAA4ADAAOgA6ADoAXwB0AGIAbQBlAHMAcwBhAGcAZQBzAF8AYgByAG8AdwBzAGUAcgBfAGYAbwByAG0AAP////8AAP///////////AAAAD8AAAAAKgAwADoAOgA6AF8AdABiAG8AdQB0AHAAdQB0AHcAaQBuAF8AZgBvAHIAbQAA/////wAA//////////8AAAAA2wAAAAAAAAAC2wAAAAAAAAAB2wAAAAAAAAAD2wAAAAAAAAAA2gAAAB4AMAAtADEANQA0ADIAOQA1ADUAMwAwADEAMwAwADAATgAAAfgAAAAjAAADlQAAAp4AAAAAAAAAAAAABVUAAALXAAAAAesAAAEIAAAAAPsAAAACAAAAAgAAAAAAAAAB+wAAAAIAAAACAAAAAAAAAAH9AAAAiwAAAAAaADoAOgA6AC8AdgBEAG8AYwBrAEEAcgBlAGEAAQAAApsAAAAAAAL7AAAAAQAAAAEAAAAA+wAAAAEAAAABAAAAAPwAAABBAQAAACAAMQA6ADoAOgBfAHQAYgBmAGkAbgBkAF8AZgBvAHIAbQAB/////wAAAAABkAAAAlcAAAFpR6P3GgAAAAD8AAAAKQAAAAAcADoAOgA6AE0ARABJAEEAUgBFAEEAVABJAEwARQAB/////wAAAAAAANsAAAAAAAAAAtsAAAAAAAAAAdsAAAAAAAAAA9sAAAAAAAAAAA==
+QTOOLBAR 3 0
+AAAA/wAAAAD9AAAAAAAABNoAAAJlAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAMAAAAQAFMAdABhAG4AZABhAHIAZAEAAAAA/////wAAAAAAAAAAAAAAHgBDAHUAcgByAGUAbgB0ACAAQwBvAG4AdABlAHgAdAEAAAJx/////wAAAAAAAAAAAAAAIgBTAGUAbABlAGMAdABpAHYAZQAgAEQAaQBzAHAAbABhAHkBAAAEn/////8AAAAAAAAAAA==
+_tbstandard_form 1
+_tbseldisp_form 1
+_tbcontext_form 1
+APP_LAYOUT: 57 1 40 11 5 N 0
+_tbFTPClient_form F=0
+_tbfind_symbol_form F=32
+_tbsearch_form F=8
+_tbbookmarks_form F=8
+_tbdebug_watches_form F=64
+_tbfind_form F=36
+_tbdeltasave_form F=0
+_tbnotification_form F=36
+_tbclass_form F=8
+_tbderivedclasses_form F=40
+_tbbaseclasses_form F=40
+_tbdebug_memory_form F=64
+_tbdebug_classes_form F=64
+_tbdebug_threads_form F=64
+_tbopen_form F=40
+_tbbufftabs_form F=11
+_tbdebug_members_form F=64
+_tbannotations_browser_form F=0
+_tbsymbolcalls_form F=40
+_tbunittest_form F=0
+_tbmessages_browser_form F=8
+_tbregex_form F=40
+_tbdebug_exceptions_form F=384
+_tboutputwin_form F=8
+_tbtagrefs_form F=8
+_tbtagwin_form F=8
+_tbprops_form F=8
+_tbslickc_stack_form F=8
+_tbfilelist_form F=44
+_tbFTPOpen_form F=0
+_tbclipboard_form F=44
+_tbdebug_breakpoints_form F=384
+_tbdebug_regs_form F=64
+_tbdebug_autovars_form F=64
+_tbdebug_locals_form F=64
+_tbdebug_stack_form F=64
+_tbshell_form F=8
+_tbprojects_form F=8
+_tbproctree_form F=8
+_tbcbrowser_form F=8
+_tbprojects_form T=0
+_tbcbrowser_form T=0
+_tbmessages_browser_form T=0
+_tbclass_form T=0
+_tbtagwin_form T=0
+_tbsearch_form T=0
+_tbproctree_form T=0
+_tbshell_form T=0
+_tbopen_form T=0
+_tboutputwin_form T=0
+_tbtagrefs_form T=0
+AAAAAwAAAAEAAAAC2gAAAAIAMAAAAAAAAAA1AAAE2QAAApkAAAAAAAAAAAAABVUAAALXAAAAAesAAARwAAAAAPsAAAACAAAAAgAAAAEAAAAA+wAAAAIAAAACAAAAAAAAAAH9AAABoQAAAAAaADoAOgA6AC8AdgBEAG8AYwBrAEEAcgBlAGEBAAAAAVEAAAAAAAL7AAAABQAAAAUAAAAAAAAABAAAAAEAAAACAAAAA/sAAAAFAAAABQAAAAAAAAABAAAAAgAAAAMAAAAE/AAAAD0AAAAAKAAwADoAOgA6AF8AdABiAHAAcgBvAGoAZQBjAHQAcwBfAGYAbwByAG0BAP////8AAP///////////AAAAD0AAAAAKAAwADoAOgA6AF8AdABiAHAAcgBvAGMAdAByAGUAZQBfAGYAbwByAG0AAP////8AAP///////////AAAADcAAAAAIgAwADoAOgA6AF8AdABiAGMAbABhAHMAcwBfAGYAbwByAG0AAP////8AAP///////////AAAAD0AAAAAKAAwADoAOgA6AF8AdABiAGMAYgByAG8AdwBzAGUAcgBfAGYAbwByAG0AAP////8AAP///////////AAAADUAAAAAIAAwADoAOgA6AF8AdABiAG8AcABlAG4AXwBmAG8AcgBtAAD/////AAD///////////0AAAJ7AAAAABoAOgA6ADoALwB2AEQAbwBjAGsAQQByAGUAYQEAAAAGKgABAAAAAfsAAAACAAAAAgAAAAAAAAAB+wAAAAIAAAACAAAAAQAAAAD8AAAAKQAAAAAcADoAOgA6AE0ARABJAEEAUgBFAEEAVABJAEwARQEAAAABqAAB/QAAAfsAAAAAGgA6ADoAOgAvAHYARABvAGMAawBBAHIAZQBhAQAAAADKAAAAAAAC+wAAAAYAAAAGAAAAAwAAAAIAAAAFAAAAAAAAAAEAAAAE+wAAAAYAAAAGAAAAAAAAAAEAAAACAAAAAwAAAAQAAAAF/AAAADkAAAAAJAAwADoAOgA6AF8AdABiAHMAZQBhAHIAYwBoAF8AZgBvAHIAbQAA/////wAA///////////8AAAAOQAAAAAkADAAOgA6ADoAXwB0AGIAdABhAGcAdwBpAG4AXwBmAG8AcgBtAAD/////AAD///////////wAAAA7AAAAACYAMAA6ADoAOgBfAHQAYgB0AGEAZwByAGUAZgBzAF8AZgBvAHIAbQAA/////wAA///////////8AAAANwAAAAAiADAAOgA6ADoAXwB0AGIAcwBoAGUAbABsAF8AZgBvAHIAbQEA/////wAA///////////8AAAATQAAAAA4ADAAOgA6ADoAXwB0AGIAbQBlAHMAcwBhAGcAZQBzAF8AYgByAG8AdwBzAGUAcgBfAGYAbwByAG0AAP////8AAP///////////AAAAD8AAAAAKgAwADoAOgA6AF8AdABiAG8AdQB0AHAAdQB0AHcAaQBuAF8AZgBvAHIAbQAA/////wAA//////////8AAAAA2wAAAAAAAAAC2wAAAAAAAAAB2wAAAAAAAAAD2wAAAAAAAAAA2gAAAB4AMAAtADEANQA0ADIAOQA1ADUAMwAwADEAMwAwADAATgAAAfgAAAAjAAADlQAAAp4AAAAAAAAAAAAABVUAAALXAAAAAesAAAEIAAAAAPsAAAACAAAAAgAAAAAAAAAB+wAAAAIAAAACAAAAAAAAAAH9AAAAiwAAAAAaADoAOgA6AC8AdgBEAG8AYwBrAEEAcgBlAGEAAQAAApsAAAAAAAL7AAAAAQAAAAEAAAAA+wAAAAEAAAABAAAAAPwAAABBAQAAACAAMQA6ADoAOgBfAHQAYgBmAGkAbgBkAF8AZgBvAHIAbQAB/////wAAAAABkAAAAlcAAAFpR6P3GgAAAAD8AAAAKQAAAAAcADoAOgA6AE0ARABJAEEAUgBFAEEAVABJAEwARQAB/////wAAAAAAANsAAAAAAAAAAtsAAAAAAAAAAdsAAAAAAAAAA9sAAAAAAAAAAA==
+QTOOLBAR 3 0
+AAAA/wAAAAD9AAAAAAAABNoAAAJlAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAMAAAAQAFMAdABhAG4AZABhAHIAZAEAAAAA/////wAAAAAAAAAAAAAAHgBDAHUAcgByAGUAbgB0ACAAQwBvAG4AdABlAHgAdAEAAAJx/////wAAAAAAAAAAAAAAIgBTAGUAbABlAGMAdABpAHYAZQAgAEQAaQBzAHAAbABhAHkBAAAEn/////8AAAAAAAAAAA==
+_tbstandard_form 1
+_tbseldisp_form 1
+_tbcontext_form 1
