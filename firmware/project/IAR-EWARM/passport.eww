@@ -29,7 +29,7 @@
         <configuration>Debug</configuration>
       </member>
       <member>
-        <project>multiboxes</project>
+        <project>passport</project>
         <configuration>Debug</configuration>
       </member>
     </batchDefinition>
@@ -48,7 +48,7 @@
         <configuration>Release</configuration>
       </member>
       <member>
-        <project>multiboxes</project>
+        <project>passport</project>
         <configuration>Release</configuration>
       </member>
     </batchDefinition>
