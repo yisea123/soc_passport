@@ -4,7 +4,7 @@
 #include "semphr.h"
 #include "mss_gpio.h"
 #include "indicator.h"
-
+#include "version.h"
 
 #include <stdio.h>
 #include <string.h>

@@ -1,6 +1,7 @@
 #ifndef __TASKSYNC_H__
 #define __TASKSYNC_H__
 
+#include "FreeRTOS.h"
 #include "semphr.h"
 
 extern xSemaphoreHandle sem_ready_supervisor;

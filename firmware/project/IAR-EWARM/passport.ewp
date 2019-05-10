@@ -334,6 +334,7 @@
           <state>$PROJ_DIR$/../../FreeRTOS/include</state>
           <state>$PROJ_DIR$/../../FreeRTOS/portable/IAR/ARM_CM3</state>
           <state>$PROJ_DIR$/../../config</state>
+          <state>$PROJ_DIR$/../../application</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -629,7 +630,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>multiboxes.bin</state>
+          <state>passport.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1964,7 +1965,31 @@
   <group>
     <name>application</name>
     <file>
+      <name>$PROJ_DIR$\..\..\application\appl_main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\check_scancalib.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\cmd_scan.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\comm_scancalib.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\command.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\application\console.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\debug.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\imagelib.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\imagelib.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\application\indicator.c</name>
@@ -1979,7 +2004,22 @@
       <name>$PROJ_DIR$\..\..\application\nvmdata.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\application\nvram_test.c</name>
+      <name>$PROJ_DIR$\..\..\application\parser.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\scancalib.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\scanner.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\scanner.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\spv_fun.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\supervisor.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\application\tasks.c</name>
@@ -1988,7 +2028,10 @@
       <name>$PROJ_DIR$\..\..\application\tasksync.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\application\test.c</name>
+      <name>$PROJ_DIR$\..\..\application\version.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\version.h</name>
     </file>
   </group>
   <group>

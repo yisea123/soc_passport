@@ -29,7 +29,9 @@
 #include "fpga.h"
 
 #include "imagedigitiser.h"
-#include "wm8215.h"
+#include "wm8235.h"
+#include "scanunit.h"
+#include "scancalib.h"
 
 #include "imagesensor.h"
 #include "fpga_cis.h"
@@ -212,7 +214,7 @@ const int photosensor_num = DEVICE_COUNT(photosensor);
 
 /* FPGA configuration */
 const struct fpga_resource fpga_rc = {
-	.ctrl_reg_base = (void *)0x30500000u,
+	.ctrl_reg_base = (void *)0x30000000u,
 	.ints_reg_base = (void *)0x30400000u,
 	.mclk_frequency = 100000000u,
 };
@@ -283,71 +285,70 @@ struct steppermotor steppermotor_list[] = {
 const int steppermotor_num = DEVICE_COUNT(steppermotor);
 
 /* scanunit configuration */
-static const struct wm8215_resource afe_rc = {
-	.ctrl_base = (void *)0x30100000u,
-	.mmio_base = (void *)0x30100004u,
+/* scanunit afe device definition */
+typedef enum
+{
+	CHECK_AFE_A,
+}device_id;
+
+static const struct wm8235_resource check_afe_a_rc = {
 	.mask =	1,
 	.mss_spi = &g_mss_spi1,
 	.spi_clk_freq = 10000000u,
 };
 
-struct imagedigitiser imagedigitiser_list[] = {
-  	{
-		.resource = &afe_rc,
-		.install = wm8215_install,
-	},
-};
-
-const int imagedigitiser_num = DEVICE_COUNT(imagedigitiser);
-
-
-static const struct fpga_cis_resource cis_a_rc = {
-	.ctrl_base = (void *)0x30000000u,
-	.mmio_base = (void *)0x30002008u,
+static const struct fpga_cis_resource check_cis_a_rc = {
+	.ctrl_base = (void *)0x30200000u,
+	.mmio_base = (void *)0x30200008u,
 	.mask =	1,
 };
-
-static const struct fpga_cis_resource cis_b_rc = {
-	.ctrl_base = (void *)0x30000000u,
-	.mmio_base = (void *)0x30003008u,
-	.mask =	1,
-};
-
-
-struct imagesensor imagesensor_list[] = {
-	{	// CIS of side A
-		.resource = &cis_a_rc,
-		.install = fpga_cis_install,
-	},
-	{	// CIS of side B
-		.resource = &cis_b_rc,
-		.install = fpga_cis_install,
-	},
-};
-
-const int imagesensor_num = DEVICE_COUNT(imagesensor);
-
-static const struct scanunit_resource scanunit_rc = {
-	.ctrl_base = (void *)0x30000000u,
-	.int_mask = 1,
-	.fabric_irq = 0,
-};
-
 
 /* define scanunit hardware information */
-const struct scanunit_hwinfo scanner_hwinfo = {
-	.sides = 2,
-	.colors = 3,
-	.lightsources = 3,
-	.sensors = 2,
-	.digitisers = 1,
-	.sensor_a = 0,
-	.sections_a = 1,
-	.sectinfo_a = {{1, 648, 1, 648, 0, 1},},
-	.sensor_b = 1,
-	.sections_b = 1,
-	.sectinfo_b = {{1, 648, 1, 648, 0, 0},},
+struct scanunit checkscanner = {
+
+		// check  scanunit
+		.resource = {
+			.ctrl_base = (void *)0x30200000,
+			.int_mask = 1,
+			.fabric_irq = 0,
+		},
+		.hwinfo = {
+			.sides = 1,
+			.colors = 3,
+			.lightsources = 10,
+			.sensors = 2,
+			.digitisers = 1,
+			.sensor_a = 0,
+			.sections_a = 1,
+			.sectinfo_a = {{1, 1008, 1, 1008, 0, 0},},
+		},
+		.sensorlist = {
+			{	// check CIS of side A
+				.resource = &check_cis_a_rc,
+				.install = fpga_cis_install,
+			}
+		},
+		.digitiserlist =  {
+			{
+				.resource = &check_afe_a_rc,
+				.install = wm8235_install,
+				.imagedigitiserid = CHECK_AFE_A,
+			}
+		},
+		.afe_info ={
+			.flag_en = 1,
+			.master_mode_en = 0,
+			.flagsig_sel = AFE_B4_SEL_FLAG_FLAGPIX,
+			.linelength = 4032,
+			.flagpixlen = 63,
+			.pllctrl1 = 0x00,
+			.pllctrl2 = 0x09,
+			.pll_exdiv_sel = AFE_1C_PLLEXDIV_SEL_1,
+			.dllconfig1 = 0x20,
+			.dllconfig2 = 0x10,
+		},
 };
+
 //-----------------------------------------------------------------
 static struct motor_data	mechunit_cardpath_motor_data[]={
 	{
@@ -462,25 +463,10 @@ struct mechanism_dev_t mechnism_cardpath_dev={
 
 //-----------------------------------------------------------------
 struct gpiokey_resource force_card_eject_rc={NULL, MSS_GPIO_0, GPIOKEY_TYPE_LEVEL_LOW};
-struct gpiokey_resource version_config_1_rc={NULL, MSS_GPIO_4, GPIOKEY_TYPE_LEVEL_HIGH};
-struct gpiokey_resource version_config_2_rc={NULL, MSS_GPIO_5, GPIOKEY_TYPE_LEVEL_HIGH};
-struct gpiokey_resource version_config_3_rc={NULL, MSS_GPIO_6, GPIOKEY_TYPE_LEVEL_HIGH};
 
 struct gpiokey gpiokey_list[]={
   {
   	.resource = &force_card_eject_rc,
-	.install = gpiokey_install,
-  },
-  {
-	.resource = &version_config_1_rc,
-	.install = gpiokey_install,
-  },
-  {
-	.resource = &version_config_2_rc,
-	.install = gpiokey_install,
-  },
-  {
-	.resource = &version_config_3_rc,
 	.install = gpiokey_install,
   },
 };
@@ -494,11 +480,8 @@ static int board_initialize_peripheral()
 	/* Initialize MSS GPIOs */
 	MSS_GPIO_init();
 
-	/* Initialize MSS GPIO driven LED indicator */
-	MSS_GPIO_config(MSS_GPIO_6, MSS_GPIO_OUTPUT_MODE);
-
 	/* Initialize CorePWM instance */
-	PWM_init(&pwm_chip0.pwm_inst, pwm_chip0.base_addr, pwm_chip0.prescale, PWM_PERIOD(&pwm_chip0, pwm_chip0.period));
+//	PWM_init(&pwm_chip0.pwm_inst, pwm_chip0.base_addr, pwm_chip0.prescale, PWM_PERIOD(&pwm_chip0, pwm_chip0.period));
 
 	return 0;
 }
@@ -515,19 +498,16 @@ static int board_install_devices()
 
 	rs = gpiokey_install_devices();
 	
-	gpio_photosensor_drvinit();
-	rs = photosensor_install_devices();
-
-	fpga_stepmotor_drvinit();
-	rs = steppermotor_install_devices();
+//	gpio_photosensor_drvinit();
+//	rs = photosensor_install_devices();
+//
+//	fpga_stepmotor_drvinit();
+//	rs = steppermotor_install_devices();
 	
 	fpga_cis_drvinit();
-	rs = imagesensor_install_devices();
+	wm8235_drvinit();
 
-	wm8215_drvinit();
-	rs = imagedigitiser_install_devices();
-
-	rs = scanunit_install(&scanunit_rc);
+	rs = scanunit_install(&checkscanner);
 
 	return rs;
 }
