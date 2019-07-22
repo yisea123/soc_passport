@@ -81,18 +81,14 @@ enum packet_type
 };
 
 
-//扫描模式
+//扫描面
 //bit7	bit6  bit5	bit4  bit3	bit2  bit1	bit0
-//保留	灰度  彩色	 红    绿	 蓝   红外	紫外
-enum _IAM_SCAN_MODE
+//		  …高位保留…			B面  A面	双面
+enum _IAM_DUPLEX_PAGE
 {
-	IAM_GREY_MODE			= 0x40,			//灰度模式
-	IAM_COLOR_MODE			= 0x20,			//彩色模式
-	IAM_RED_MODE			= 0x10,			//红色模式
-	IAM_GREEN_MODE			= 0x08,			//绿色模式
-	IAM_BLUE_MODE			= 0x04,			//蓝色模式
-	IAM_INFRARED_MODE		= 0x02,			//红外模式
-	IAM_ULTRAVIOLET_MODE	= 0x01			//紫外模式
+	IAM_B_PAGE				= 0x04,			//B面
+	IAM_A_PAGE 				= 0x02,			//A面
+	IAM_AB_PAGE				= 0x01			//双面
 };
 
 /* packet flag definition */

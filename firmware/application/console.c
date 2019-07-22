@@ -8,7 +8,11 @@
 #include "scandrv.h"
 #include "scancalib.h"
 #include "scanner.h"
+#include "command.h"
 #include "card_scanpath_drv.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "actions.h"
 
 extern int scanmode;
 extern struct scanunit_scanmode mode;
@@ -138,11 +142,12 @@ int console(void)
 	int rs;
 
 	while (1) {
-		int cmd, value, lightsource, side, device, address;
+		unsigned int cmd, value, lightsource, side, device, address;
 		unsigned int offset, vsmpup, vsmpdown, shift, siginac, sigacti, sih, sil, sil_plus;
-		unsigned int lightsel, side_a, side_b, channelid, unintid;
+		unsigned int lightsel, side_a, side_b, channelid;
 		unsigned int resolution, mode;
 		unsigned char afevalue;
+		struct afe_test_pattern_generator testpara;
 		char *p, *cp;
 
 		memset(cmdbuf, 0, sizeof(cmdbuf));
@@ -186,14 +191,17 @@ int console(void)
 			printf("fpga_writel %x to address (0x%08x)\r\n", value, address);
 			break;
 		case '1':
+			rs = sscanf(p, "%d%x", &value, &checkscanner.afe_info.flagpixlen);
 			//scanner_set_all_digitiser_default_config();
+			checkscanner.afe_info.outdataen = (value==0)?AFE_07_OUTPD:0;
+			printf("scanner_cmos_output_config %s!\r\n", (checkscanner.afe_info.outdataen==0)?"flagenabled":"flagclosed");
 			scanner_cmos_output_config(&checkscanner, checkscanner.hwinfo.sectinfo_a->digitiser_id);
 			break;
 		case '2':
-			check_scanner_get_digitiser_default_config();
+			//check_scanner_get_digitiser_default_config();
 			break;
 		case '3':
-			rs = sscanf(p, "%d%d%x%x", &device, &channelid, &address, &afevalue);
+			rs = sscanf(p, "%d%d%x%02x", &device, &channelid, &address, &afevalue);
 			if (rs != 4 ) {
 				print_cmderror((p - cmdbuf), "invalid afe parameters\n");
 				break;
@@ -233,43 +241,51 @@ int console(void)
 		case '6':
 			rs = sscanf(p, "%d%d%x", &device, &channelid, &value);
 			scanner_set_afe_clock_monitor_source(&checkscanner, channelid, value);
-
 			printf("do scanner_set_afe_clock_monitor_source(%s:feid %x, monclkcrl1 0x%x)\r\n", (device==CHECK_SCANUNIT)?"checkscanner":"ocrscanner", channelid, value);
+			break;
+		case '7':
+			rs = sscanf(p, "%x%x%04x%x%x", &testpara.output_type, &testpara.output_invert, &testpara.pgcode, &testpara.pgwidth1, &testpara.pgwidth2);
+			if (rs != 5 ) {
+				print_cmderror((p - cmdbuf), "invalid afe test pattern generetor parameters\n");
+				break;
+			}
+                        scanner_afe_test_pattern_generator_config(&checkscanner, 0, testpara);
 			break;
 		case 'a':
 		case 'A':
 			rs = sscanf(p, "%x%x%d", &resolution, &mode, &side);
-			if (rs != 3 || resolution < 0 || resolution > 5) {
+			if (rs != 3 || resolution > 5) {
 				print_cmderror((p - cmdbuf), "invalid scanning parameters\n");
 				break;
 			}
-			printf("do adjust_afe_offset(resolution %x, mode %x, sideid %d)\r\n", check_scanning_ctrl.hwresolution, check_scanning_ctrl.hwmode, value);
 
-			check_scanning_ctrl.scanmode = mode;
-			check_scanning_ctrl.hwresolution = resolution;
-			rs = check_scanner_adjust_afe_offset(check_scanning_ctrl.hwresolution, check_scanning_ctrl.scanmode, value);
+			scanning_ctrl.scanmode = mode;
+			scanning_ctrl.hwresolution = resolution;
+			printf("do adjust_afe_offset(resolution %x, mode %x, sideid %d)\r\n", scanning_ctrl.hwresolution, scanning_ctrl.hwmode, side);
+			rs = check_scanner_adjust_afe_offset(scanning_ctrl.hwresolution, scanning_ctrl.scanmode, side);
 			if(rs== 0)
-				check_scanner_save_ajustable_config(check_scanning_ctrl.hwresolution, check_scanning_ctrl.scanmode, CONFIG_ADC, value);
+				check_scanner_save_ajustable_config(scanning_ctrl.hwresolution, scanning_ctrl.scanmode, CONFIG_ADC, side);
 			break;
 		case 'c':
 		case 'C':
 			rs = sscanf(p, "%x%x%d%x", &resolution, &mode, &side, &lightsel);
-			if (rs != 4 || resolution < 0 || resolution > 5 ) {
+			if (rs != 4 || resolution > 5 ) {
 				print_cmderror((p-cmdbuf), "invalid scanning parameters\n");
 				break;
 			}
-			printf("do adjust_cis_led_brightness(resolution%x, mode%x, sideid%d, lightsel%x)\r\n", resolution, mode, value, lightsel);
+			printf("do adjust_cis_led_brightness(resolution%x, mode%x, sideid%d, lightsel%x)\r\n", resolution, mode, side, lightsel);
 			{
-				check_scanning_ctrl.scanmode = mode;
-				check_scanning_ctrl.hwresolution = resolution;
-				rs = check_scanner_adjust_cis_led_brightness(check_scanning_ctrl.hwresolution, check_scanning_ctrl.scanmode, value, lightsel);
+				scanning_ctrl.scanmode = mode;
+				scanning_ctrl.hwresolution = resolution;
+				//rs = spv_do_scanning(&checkscanner, IAM_A_PAGE, scanning_ctrl, 0);
+				rs = check_scanner_adjust_cis_led_brightness(scanning_ctrl.hwresolution, scanning_ctrl.scanmode, side, lightsel);
 				if( rs== 0)
-					check_scanner_save_ajustable_config(check_scanning_ctrl.hwresolution, check_scanning_ctrl.scanmode, CONFIG_CIS, value);
+					check_scanner_save_ajustable_config(scanning_ctrl.hwresolution, scanning_ctrl.scanmode, CONFIG_CIS, value);
 			}
 			break;
 		case 'e':
 			rs = sscanf(p, "%d %x %d", &side, &value, &lightsource);
-			if (rs != 3 || value < 0 || value > 0x7ea4 ||lightsource < 0 || lightsource > 7) {
+			if (rs != 3 || value > 0x7ea4 || lightsource > 7) {
 				print_cmderror((p-cmdbuf), "invalid ontime value or lightsource\n");
 				break;
 			}
@@ -299,7 +315,7 @@ int console(void)
 			break;
 		case 'G':
 			rs = sscanf(p, "%d%d%x", &device, &side, &value);
-			if (rs != 3 || value < 0 || value > 255) {
+			if (rs != 3 || value > 255) {
 				print_cmderror((p - cmdbuf), "invalid gain parameter\n");
 				break;
 			}
@@ -315,12 +331,12 @@ int console(void)
 				break;
 			}
 			printf("do scanner_set_default_config(device%d)\r\n", device);
-			check_scanner_set_sensor_default_config();
+			//check_scanner_set_sensor_default_config();
 			break;
 		case 'k':
 		case 'K':
 			rs = sscanf(p, "%d%d", &device, &value);
-			if (rs != 2 || value < 0 || value > 1) {
+			if (rs != 2 || value > 1) {
 				print_cmderror((p-cmdbuf), "invalid scanning status\n");
 				break;
 			}
@@ -330,19 +346,19 @@ int console(void)
 			{
 				if (value)
 				{
-					scanunit_start_scanning(&checkscanner);
-					scanner_afe_power_ctrl(&checkscanner, device, 1);
+					scanner_start_scanning(&checkscanner, IAM_A_PAGE);
+					vTaskDelay(500/ portTICK_RATE_MS);
+					scanner_stop_scanning(&checkscanner, IAM_A_PAGE);
 				}
 				else
 				{
-					scanunit_stop_scanning(&checkscanner);
-					scanner_afe_power_ctrl(&checkscanner, device, 0);
+					scanner_stop_scanning(&checkscanner, IAM_A_PAGE);
 				}
 			}
 			break;
 		case 'l':
 			rs = sscanf(p, "%d%d", &device, &value);
-			if (rs != 2 || value < 0 || value > 1) {
+			if (rs != 2 || value > 1) {
 				print_cmderror((p-cmdbuf), "invalid value\n");
 				break;
 			}
@@ -361,7 +377,7 @@ int console(void)
 				print_cmderror((p-cmdbuf), "invalid parameter\n");
 				break;
 			}
-			printf("turn on unit %s lightsource side_a %x  side_b %x\r\n", (device == CHECK_SCANUNIT) ? "CHECK" : "OCR", side_a, side_b);
+			printf("turn on unit %s lightsource side_a %x side_b %x\r\n", (device == CHECK_SCANUNIT) ? "CHECK" : "OCR", side_a, side_b);
 			if(device == CHECK_SCANUNIT)
 			{
 				scanner_set_cis_lightsource(&checkscanner, checkscanner.hwinfo.sensor_a, side_a);
@@ -369,33 +385,35 @@ int console(void)
 			}
 			break;
 		case 'm':
-		case 'M':
-/*			{
-				int dir, speed, steps;
-				rs = sscanf(p, "%d %d %d", &dir, &value, &steps);
-				if (rs != 3 || dir < 0 || dir > 1 || (value < 0 || value > 2) || steps < 0 || steps > 4000) {
+			{
+				int dir;
+				rs = sscanf(p, "%d", &dir);
+				if (rs != 1 || dir < 0 || dir > 1 ) {
 					print_cmderror((p-cmdbuf), "invalid media move parameters\n");
 					break;
 				}
-				switch (value) {
-				case 0:
-					speed = CARDPATH_SPEED_MOVECARD;
-					break;
-				case 1:
-					speed = CARDPATH_SPEED_GRAY;
-					break;
-				case 2:
-					speed = CARDPATH_SPEED_COLOR;
+				rs = Actions_Move(dir);
+//				rs = cardpath_step(dir, speed, steps);
+				printf("Actions_Move: dir=%d.\r\n", dir, rs);
+			}
+			break;
+		case 'M':
+			{
+				int dir, speed, steps;
+				rs = sscanf(p, "%d %d", &dir, &steps);
+				if (rs != 2 || dir < 0 || dir > 1 || steps < 0 || steps > 40000) {
+					print_cmderror((p-cmdbuf), "invalid media move parameters\n");
 					break;
 				}
+				motor1_run(dir, steps);
 //				rs = cardpath_step(dir, speed, steps);
-				printf("cardpath_step: dir=%d, speed=%d, steps=%d. return val = %d\r\n", dir, speed, steps, rs);
-			}   */
+				printf("motor_step: dir=%d, speed=%d, steps=%d. return val = %d\r\n", dir, speed, steps, rs);
+			}
 			break;
 		case 'o':
 		case 'O':
 			rs = sscanf(p, "%d%d%x", &device, &side, &offset);
-			if (rs != 3 || offset > 0xff || value > 1 ) {
+			if (rs != 3 || offset > 0xff || side > 1 ) {
 				print_cmderror((p-cmdbuf), "invalid AFE offset value or invalid side value\n");
 				break;
 			}
@@ -410,10 +428,11 @@ int console(void)
 				break;
 			}
 			printf("print photosensor status\r\n");
+			sensor_test();
 			break;
 		case 'P':
 			rs = sscanf(p, "%d", &value);
-			if (rs != 1 || value < 0 || value > 1) {
+			if (rs != 1 || value > 1) {
 				print_cmderror((p-cmdbuf), "invalid unit number (should be 0 - paperpath; 1 - acceptor)\n");
 				break;
 			}
@@ -450,6 +469,8 @@ int console(void)
 			printf("do set_afe_vsmpup_config(%s:%d, %x, %x, %x)\r\n", (device== CHECK_SCANUNIT)?"checkscanner":"ocrscanner", side, vsmpup, vsmpdown, shift);
 			if(device == CHECK_SCANUNIT)
 				scanner_set_afe_vsmpup_config(&checkscanner, side, vsmpup, vsmpdown);
+			fpga_writel(shift, (char *)0x30200080);
+			printf("fpga_writel %x to address (0x%08x)\r\n", shift, 0x30200080);
 			break;
 		case 'r':
 		case 'R':
@@ -468,18 +489,18 @@ int console(void)
 			}
 			if(device == CHECK_SCANUNIT)
 			{
-				check_scanning_ctrl.scanmode = mode;
-				check_scanning_ctrl.hwresolution = resolution;
-				check_scanner_set_sensor_config(CHECK_SCANUNIT, check_scanning_ctrl.hwresolution, check_scanning_ctrl.scanmode);
+				scanning_ctrl.scanmode = mode;
+				scanning_ctrl.hwresolution = resolution;
+				scanner_set_sensor_config(&checkscanner, scanning_ctrl.hwresolution, scanning_ctrl.scanmode, SIDE_A);
 			}
 
 			if (cmd == 's') {
-				check_scanner_setup_ajustable_config(check_scanning_ctrl.hwresolution, check_scanning_ctrl.hwmode);
+				check_scanner_setup_ajustable_config(scanning_ctrl.hwresolution, scanning_ctrl.hwmode);
 				if(device == CHECK_SCANUNIT)
 				{
 					scanunit_turnon_lights(&checkscanner);
 					scanunit_start_scanning(&checkscanner);
-//					cardpath_cardscan((move_scantype_t)(check_scanner_modetospeedtype(check_paraconfig.para)));
+//					cardpath_cardscan((move_scantype_t)(check_scanner_modetospeedtype(paraconfig.para)));
 					scanunit_stop_scanning(&checkscanner);
 				}
 			}else
@@ -495,11 +516,17 @@ int console(void)
 			break;
 		case 'x':
 		case 'X':
-			if (*p) {
+			rs = sscanf(p, "%d", &device);
+			if (rs != 1) {
 				print_cmderror((p-cmdbuf), "unnecessary parameter\n");
 				break;
 			}
 //			spv_do_scan_calibration(1, 100);
+			if(device == CHECK_SCANUNIT)
+			{
+				motor1_run(0, 500);
+				check_scanner_calibrate_adjustable_paramters();
+			}
 			break;
 		default:
 			print_cmderror((cp-cmdbuf), "invalid command\n");

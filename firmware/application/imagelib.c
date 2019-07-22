@@ -2,8 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 
-extern const struct scancalib_data_buf buf;
-
 int img_rawdata_section(unsigned char *rawdata, unsigned char *outdata, int totalpixels, int linepixels, int start_pixel, int end_pixel, int unitid)
 {
 	int i, j, lines, width;

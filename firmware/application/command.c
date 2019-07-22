@@ -56,7 +56,7 @@ int cmd_nop(comm_packet_head_t *cmdhead, void *data)
 {
 	resp_packet_init(&reply_nodata, cmdhead);
 	reply_nodata.ptype = PACKET_RESPONSE_SUCCESS;
-	reply_nodata.status = get_media_status();
+	reply_nodata.status = 0;
 	host_send_response(&reply_nodata, NULL, 0);
 	return 0;
 }
@@ -65,10 +65,10 @@ int cmd_nop(comm_packet_head_t *cmdhead, void *data)
 int cmd_undefined(comm_packet_head_t *cmdhead, void *data)
 {
 	resp_packet_init(&reply_nodata, cmdhead);
-	err_info_init();
+	//err_info_init();
 	reply_nodata.ptype = PACKET_RESPONSE_ERROR;
 	reply_nodata.status = RESN_APP_COMMON_UNDEFINED_COMMAND;
-	err_info_fill(RESN_CLASS_APP_COMMON, -RESN_APP_COMMON_UNDEFINED_COMMAND);
+	//err_info_fill(RESN_CLASS_APP_COMMON, -RESN_APP_COMMON_UNDEFINED_COMMAND);
 	host_send_response(&reply_nodata, NULL, 0);
 	return 0;
 }
@@ -80,7 +80,7 @@ int cmd_get_device_info(comm_packet_head_t *cmdhead, void *data)
 
 	resp_packet_init(&reply_nodata, cmdhead);
 	reply_nodata.ptype = PACKET_RESPONSE_SUCCESS;
-	reply_nodata.status = get_media_status();
+	reply_nodata.status = 0;//get_media_status();
 	reply_nodata.datalength = sizeof(device_info_t);
 	host_send_response(&reply_nodata, &deviceinfo, reply_nodata.datalength); 
 	return 0;
@@ -128,7 +128,7 @@ int cmd_get_device_status(comm_packet_head_t *cmdhead, void *data)
 		device_status.scanunit = '0';
 
 	reply_nodata.ptype = PACKET_RESPONSE_SUCCESS;
-	reply_nodata.status = get_media_status();
+	reply_nodata.status = 0;//get_media_status();
 	reply_nodata.datalength = sizeof(device_status_t);
 	host_send_response(&reply_nodata, &device_status, reply_nodata.datalength);
 	return 0;
@@ -156,7 +156,7 @@ int cmd_get_sensor_status(comm_packet_head_t *cmdhead, void *data)
 			length = mech_sen_raw_input->mech_part_num*sizeof(unsigned long);
 			sensor_status = (void *)mech_sen_raw_input->p_raw_input_value;
 		}
-		reply_nodata.status = get_media_status();
+		reply_nodata.status = 0;//get_media_status();
 		reply_nodata.ptype = PACKET_RESPONSE_SUCCESS;;
 		reply_nodata.datalength = length;
 		host_send_response(&reply_nodata,sensor_status,reply_nodata.datalength);

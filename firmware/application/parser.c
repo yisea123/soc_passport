@@ -21,7 +21,7 @@ static int data_saved = 0;
 static uint8_t *rdataptr;
 static uint8_t recvbuffer[2048] = {0};
 #endif
-uint8_t commandbuff[2048];
+uint8_t commandbuff[2*1024*1024];
 
 struct command_entry{
 	uint16_t command;
@@ -38,7 +38,7 @@ const struct command_entry command_table[]={
 //	{CMD_CLEAR_STATISTICS,		cmd_clear_statistics},
 //	{CMD_GET_DEVICE_INFO,		cmd_get_device_info},
 //	{CMD_GET_DEVICE_PARTLIST,	cmd_get_device_partlist},
-//	{CMD_RESET,			cmd_reset},
+	{CMD_RESET,			cmd_reset},
 //	{CMD_EJECT_FRONT,		cmd_eject_front},
 //	{CMD_EJECT_REAR,		cmd_eject_rear},
 //	{CMD_RETURN_FRONT,		cmd_return_front},
@@ -47,13 +47,13 @@ const struct command_entry command_table[]={
 	{CMD_START_SCANNING,		cmd_start_scanning},
 	{CMD_STOP_SCANNING,		cmd_stop_scanning},
 	{CMD_SET_SCANMODE,		cmd_set_scan_mode},
-	{CMD_GET_IMG_CALIB_DATA,	cmd_nop},
-//	{CMD_SET_IMG_CALIB_DATA,	cmd_set_image_calib_data},
+	{CMD_GET_IMG_CALIB_DATA,	cmd_get_image_calib_data},
+	{CMD_SET_IMG_CALIB_DATA,	cmd_set_image_calib_data},
 //	{CMD_GET_SCAN_FEATURE,		cmd_get_scan_feature }, 
 //	{CMD_DUMMY_SCANNING,		cmd_dummy_scanning},
-//	{CMD_SCANNING_ADJUSTMENT,	cmd_scanning_adjustment},
-//	{CMD_SCAN_CALIB_DATA,		cmd_scan_calibrate_data},
-//	{CMD_SCANNING_CALIBRATION,	cmd_scanning_calibration},
+	{CMD_SCANNING_ADJUSTMENT,	cmd_scanning_adjustment},
+	{CMD_SCAN_CALIB_DATA,		cmd_scan_calibrate_data},
+	{CMD_SCANNING_CALIBRATION,	cmd_scanning_calibration},
 //	{CMD_RESET_ACCEPTOR,		cmd_reset_acceptor},
 //	{CMD_ACCEPT_MEDIA,		cmd_accept_media},
 #if defined(MX6Q_VOUCHER_SCANNER_DUAL_RECYCLE_BOXES)
@@ -65,11 +65,11 @@ const struct command_entry command_table[]={
 //	{CMD_STOP_MEDIA,		cmd_stop_media},
 //	{CMD_OPEN_ALIGNER,		cmd_open_aligner},
 //	{CMD_CLOSE_ALIGNER,		cmd_close_aligner},
-//	{CMD_RESET_SCANUNIT,		cmd_reset_scanunit},
-//	{CMD_GET_IMG_EXPOSURE_TIME,	cmd_get_img_exposure_time},
-//	{CMD_SET_IMG_EXPOSURE_TIME,	cmd_set_img_exposure_time},
-//	{CMD_GET_IMG_AFE_GAIN,		cmd_get_img_afe_gain},
-//	{CMD_SET_IMG_AFE_GAIN,		cmd_set_img_afe_gain},
+	{CMD_RESET_SCANUNIT,		cmd_reset_scanunit},
+	{CMD_GET_IMG_EXPOSURE_TIME,	cmd_get_img_exposure_time},
+	{CMD_SET_IMG_EXPOSURE_TIME,	cmd_set_img_exposure_time},
+	{CMD_GET_IMG_AFE_GAIN,		cmd_get_img_afe_gain},
+	{CMD_SET_IMG_AFE_GAIN,		cmd_set_img_afe_gain},
 //	{CMD_GET_CLOCKTIME,		cmd_get_clocktime},
 	{CMD_SET_CLOCKTIME,		cmd_nop},
 //	{CMD_GET_LOG,			cmd_get_log},

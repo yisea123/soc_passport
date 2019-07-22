@@ -60,19 +60,19 @@ int task_supervisor(int arg)
 {
 	vSemaphoreCreateBinary(sem_spv);
 	vSemaphoreCreateBinary(sem_spv_done);
-	if (sem_spv == NULL || sem_spv_done == NULL)
+//	if (sem_spv == NULL || sem_spv_done == NULL)
 //		log_err("Failed creating semaphore in task_supervisor\r\n");
 
 //	mechanism_initialize();
 	scanner_initialize();
 
-	new_spv_state = NULL;
-//	spv_state = (void *)spv_state_init;
-//	while (spv_state)
-//	{
-//		spv_state = (*((spv_stat_fun)spv_state))();
-//	}
-//	log_notice("task supervisor exit!\n");
+/*	new_spv_state = NULL;
+	spv_state = (void *)spv_state_init;
+	while (spv_state)
+	{
+		spv_state = (*((spv_stat_fun)spv_state))();
+	}*/
+	printf("task supervisor exit!\r\n");
 	return 0;
 }
 
@@ -182,7 +182,7 @@ void * spv_state_idle(void)
 {
 	void * nextstate;
 	int rs;
-//	log_notice("Spv entering IDLE state!\r\n");
+	printf("Spv entering IDLE state!\r\n");
 
 	while (1) {
 		nextstate = spv_wait_order();
@@ -191,20 +191,6 @@ void * spv_state_idle(void)
 
 		if (cardpath_is_coveropen())
 			return (void *)spv_state_error;
-
-		if (cardpath_is_in_path())
-			indicator_turn_on(INDICATOR_0);
-		else
-			indicator_turn_off(INDICATOR_0);
-
-		rs = get_key();
-		if(rs > 0)
-		{
-			rs = cardpath_eject_gate();
-			if (rs == -1) {
-				nextstate = (void *)spv_state_error;
-			}
-		}
 	}
 	return NULL;
 }
@@ -214,7 +200,7 @@ void * spv_state_error(void)
 {
 	int cnt = 0;
 
-//	log_notice("Spv entering ERROR state!\r\n");
+//	printf("Spv entering ERROR state!\r\n");
 	while (1) {
 		void * nextstate;
 		nextstate = spv_wait_order();
@@ -237,3 +223,10 @@ void * spv_state_error(void)
 	return NULL;
 }
 
+void * spv_state_reset(void)
+{
+	int rs,mode;
+	void *nextstate;
+	spv_sync_done();
+	return nextstate;
+}

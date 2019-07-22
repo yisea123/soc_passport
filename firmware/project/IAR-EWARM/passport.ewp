@@ -748,7 +748,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\smartfusion2_envm.icf</state>
+          <state>$PROJ_DIR$\smartfusion2_envm-malloc.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1965,10 +1965,19 @@
   <group>
     <name>application</name>
     <file>
+      <name>$PROJ_DIR$\..\..\application\actions.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\actions.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\application\appl_main.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\application\check_scancalib.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\cmd_misc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\application\cmd_scan.c</name>
@@ -1981,6 +1990,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\application\console.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\console_cmd.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\application\console_cmd.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\application\debug.h</name>
@@ -2019,6 +2034,9 @@
       <name>$PROJ_DIR$\..\..\application\spv_fun.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\application\spv_scan.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\application\supervisor.c</name>
     </file>
     <file>
@@ -2044,6 +2062,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\config\mechdev.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\config\ramp.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\config\ramp_IC61S_4M.c</name>

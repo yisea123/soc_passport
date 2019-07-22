@@ -44,6 +44,12 @@
 
 #include "scandrv.h"
 #include "gpiokey.h"
+#include "board_config.h"
+#include "fpga_timer2.h"
+#include "fpga_stepmotor_driver2.h"
+#include "simplesensor.h"
+#include "gpio_simplesensor.h"
+
 
 #define SYS_PCLK_FREQENCY	100000000L
 #define SYS_PCLK_PERIOD		(1000000000L/SYS_PCLK_FREQENCY)
@@ -70,219 +76,168 @@ static const struct socnvm_resource envm_rc = {
 	.size = 0x400,
 };
 
-/* nvram configuration */
-struct nvram nvram_list[] = {
-	{	// nvram device 0: SPIFLASH region
+struct nvram nvram_1 =
+{	// nvram device 0: SPIFLASH region
 		.resource = &spiflash_rc,
 		.install = spiflash_install,
-	},
-	#if 0
-	{	// nvram device 1: AT24C16 EEPROM
-		.resource = &at24c16_rc,
-		.install = at24cxx_install,
-	},
-	#else
-	{	// nvram device 1: SOC eNVM region
+};
+
+struct nvram nvram_2 =
+{	// nvram device 1: SOC eNVM region
 		.resource = &envm_rc,
 		.install = socnvm_install,
-	},
-	#endif
 };
 
-const int nvram_num = DEVICE_COUNT(nvram);
+/* nvram configuration */
+struct nvram * nvram_list[] =
+{
+	&nvram_1,
+    &nvram_2,
+};
 
+const int nvram_num = 2;//DEVICE_COUNT(nvram);
 
-/* CorePWM instances */
-struct pwm_chip pwm_chip0 = {
+static const struct gpio_simplesensor_resource sensor0_rc = {
+	.gpiochip = NULL,
+	.gpio = MSS_GPIO_3,
+};
+
+static const struct gpio_photosensor_resource sensor1_rc = {
+	.gpiochip = NULL,
+	.gpio = MSS_GPIO_4,
+};
+
+static struct pwm_chip pwm_chip0 =
+{
 	.base_addr = COREPWM_CHIP_0,
 	.apb_dwidth = 16,
-	.prescale = 3,
 	.pclk_period = SYS_PCLK_PERIOD,
-	.period = 10000,
+	.prescale = 3,
+	.period = 1000,
 };
 
-
-/* photosensor resources */
-static const struct gpio_photosensor_resource sensor0_rc = {
+static const struct gpio_photosensor_resource sensor2_rc = {
 	.gpiochip = NULL,
 	.gpio = MSS_GPIO_8,
 	.pwmchip = &pwm_chip0,
 	.pwm = PWM_1,
 };
 
-static const struct gpio_photosensor_resource sensor1_rc = {
-	.gpiochip = NULL,
-	.gpio = MSS_GPIO_9,
-	.pwmchip = &pwm_chip0,
-	.pwm = PWM_2,
+struct simplesensor sensor_front =
+{
+	.resource = &sensor0_rc,
+	.install = gpio_simplesensor_install,
+	.status_mapping = SENSOR_ST_DETETED_IS_LOWLEVEL,
 };
 
-static const struct gpio_photosensor_resource sensor2_rc = {
-	.gpiochip = NULL,
-	.gpio = MSS_GPIO_10,
-	.pwmchip = &pwm_chip0,
-	.pwm = PWM_3,
-};
-
-static const struct gpio_photosensor_resource sensor3_rc = {
-	.gpiochip = NULL,
-	.gpio = MSS_GPIO_11,
-	.pwmchip = &pwm_chip0,
-	.pwm = PWM_4,
-};
-
-static const struct gpio_photosensor_resource sensor4_rc = {
-	.gpiochip = NULL,
-	.gpio = MSS_GPIO_12,
-	.pwmchip = &pwm_chip0,
-	.pwm = PWM_5,
+struct simplesensor sensor_rear =
+{
+	.resource = &sensor1_rc,
+	.install = gpio_simplesensor_install,
+	.status_mapping = SENSOR_ST_DETETED_IS_LOWLEVEL,
 };
 
 /* photosensor configuration */
-struct photosensor photosensor_list[] = {
-	{	// sensor 0
-		.resource = &sensor0_rc,
-		.install = gpio_photosensor_install,
-		.feature = {
-			.led_brightness_max = MAXIMUM_BRIGHTNESS,
-			.raw_input_max = 1,
-			.input_scale_mv = 3300000, /* scale = 3.3V */
-			.calibrate_mode = 0
-		},
-		.type = PHOTOSENSOR_DIGITAL,
-		.sensor_mode = PHOTOSENSOR_THROUGHBEAM,
-		.status_mapping = SENSOR_ST_DETETED_IS_HIGHLEVEL,
-	},
-	{	// sensor 1
-		.resource = &sensor1_rc,
-		.install = gpio_photosensor_install,
-		.feature = {
-			.led_brightness_max = MAXIMUM_BRIGHTNESS,
-			.raw_input_max = 1,
-			.input_scale_mv = 3300000, /* scale = 3.3V */
-			.calibrate_mode = 0
-		},
-		.type = PHOTOSENSOR_DIGITAL,
-		.sensor_mode = PHOTOSENSOR_THROUGHBEAM,
-		.status_mapping = SENSOR_ST_DETETED_IS_HIGHLEVEL,
-	},
-	{	// sensor 2
-		.resource = &sensor2_rc,
-		.install = gpio_photosensor_install,
-		.feature = {
-			.led_brightness_max = MAXIMUM_BRIGHTNESS,
-			.raw_input_max = 1,
-			.input_scale_mv = 3300000, /* scale = 3.3V */
-			.calibrate_mode = 0
-		},
-		.type = PHOTOSENSOR_DIGITAL,
-		.sensor_mode = PHOTOSENSOR_THROUGHBEAM,
-		.status_mapping = SENSOR_ST_DETETED_IS_HIGHLEVEL,
-	},
-	#ifdef IC61S
-	{	// sensor 3
-		.resource = &sensor3_rc,
-		.install = gpio_photosensor_install,
-		.feature = {
-			.led_brightness_max = MAXIMUM_BRIGHTNESS,
-			.raw_input_max = 1,
-			.input_scale_mv = 3300000, /* scale = 3.3V */
-			.calibrate_mode = 0
-		},
-		.type = PHOTOSENSOR_DIGITAL,
-		.sensor_mode = PHOTOSENSOR_THROUGHBEAM,
-		.status_mapping = SENSOR_ST_DETETED_IS_HIGHLEVEL,
-	},
-	#endif
-	{	// sensor 4
-		.resource = &sensor4_rc,
-		.install = gpio_photosensor_install,
-		.feature = {
-			.led_brightness_max = MAXIMUM_BRIGHTNESS,
-			.raw_input_max = 1,
-			.input_scale_mv = 3300000, /* scale = 3.3V */
-			.calibrate_mode = 0
-		},
-		.type = PHOTOSENSOR_DIGITAL,
-		.sensor_mode = PHOTOSENSOR_THROUGHBEAM,
-		.status_mapping = SENSOR_ST_DETETED_IS_HIGHLEVEL,
-	}
-	
+struct simplesensor * simplesensor_list[] =
+{
+	&sensor_front,
+	&sensor_rear,
 };
 
-const int photosensor_num = DEVICE_COUNT(photosensor);
+struct photosensor sensor_exist =
+{
+	.resource = &sensor2_rc,
+	.install = gpio_photosensor_install,
+	.feature =
+	{
+		.led_brightness_max = MAXIMUM_BRIGHTNESS,
+		.raw_input_max = 1,
+		.input_scale_mv = 3300000, /* scale = 3.3V */
+		.calibrate_mode = 0
+	},
+	.type = PHOTOSENSOR_DIGITAL,
+	.sensor_mode = PHOTOSENSOR_THROUGHBEAM,
+	.status_mapping = SENSOR_ST_DETETED_IS_LOWLEVEL,
+};
+
+const int simplesensor_num = (sizeof(simplesensor_list)/sizeof(struct simplesensor *));
+
+struct photosensor * photosensor_list[] =
+{
+	&sensor_exist,
+};
+
+const int photosensor_num = (sizeof(photosensor_list)/sizeof(struct photosensor *));
 
 /* FPGA configuration */
 const struct fpga_resource fpga_rc = {
 	.ctrl_reg_base = (void *)0x30000000u,
-	.ints_reg_base = (void *)0x30400000u,
+	.ints_reg_base = (void *)0x30000030u,
 	.mclk_frequency = 100000000u,
 };
 
 /* steppermotor configuration */
-extern struct motor_speedtable	motor_speed_acc_300dpi_color;
-extern struct motor_speedtable	motor_speed_dec_300dpi_color;
-extern struct motor_speedtable	motor_speed_acc_300dpi_gray;
-extern struct motor_speedtable	motor_speed_dec_300dpi_gray;
-extern struct motor_speedtable	motor_speed_acc_cardmove;
-extern struct motor_speedtable	motor_speed_dec_cardmove;
+extern struct motor_speedtable	motor_speed_acc_740_half;
+extern struct motor_speedtable	motor_speed_dec_740_half;
+extern struct motor_speedtable	motor_speed_acc_1200_half;
+extern struct motor_speedtable	motor_speed_dec_1200_half;
 
 /* size of steppermotor speed ramp tables: */
 #define FPGA_RAM_MOTOR_TABLE_RAMP_DEPTH		1024
 #define FPGA_RAM_MOTOR_TABLE_COUNT_DEPTH	3
 
-//#define MOTOR_DEV_STEPMOTOR_NUM	1
+#define MOTOR_DEV_STEPMOTOR_NUM	        1
 
-#define CARDPATH_STEPMOTOR_SPEED_NUM			3
-#ifdef IC61S_4M
-#define FPGA_STEP_CLOCK_PERIOD		250	//ns. Freq=4M
-#endif
-#ifdef IC62S_4M
-#define FPGA_STEP_CLOCK_PERIOD		250	//ns. Freq=4M
-#endif
-#ifdef IC61S_10M
-#define FPGA_STEP_CLOCK_PERIOD		100	//ns. Freq=10M
-#endif
-#define CARDPATH_STEPMOTOR_PULLIN_SPEED	300
-
-struct ramp_info cardpath_ramp_info={
-	.num_speed=CARDPATH_STEPMOTOR_SPEED_NUM,
-	.speeds=
-	{{.accel_table=&motor_speed_acc_300dpi_color, 
-	   .decel_table=&motor_speed_dec_300dpi_color},
-	  {.accel_table=&motor_speed_acc_300dpi_gray, 
-	  .decel_table=&motor_speed_dec_300dpi_gray},
-	  {.accel_table=&motor_speed_acc_cardmove, 
-	  .decel_table=&motor_speed_dec_cardmove}
+struct ramp_info passport_scanner_ramp_info =
+{
+	.num_speed = 1,
+	.speeds =
+	{
+		{
+			.accel_table=&motor_speed_acc_740_half,
+			.decel_table=&motor_speed_dec_740_half
+		},
 	}
 };
 
-static struct fpga_stepmotor_resource	motor_scan_rc=
+static struct fpga_timer_resource fpga_timer1_rc =
 {
-	.mmio_base=(void *)0x30300000, 	
-	.ram_base=(void *)0x30200000,	
-	.ram_ramp_offset = FPGA_RAM_MOTOR_TABLE_RAMP,
-	.ram_size=FPGA_RAM_MOTOR_TABLE_RAMP_DEPTH,
-	.table_ramp_size = (4*FPGA_RAM_MOTOR_TABLE_RAMP_DEPTH),
-	.table_count_size = (4*FPGA_RAM_MOTOR_TABLE_COUNT_DEPTH),
-	.stepping=STEP_MODE_16MICRO,	
-	.clock_period=FPGA_STEP_CLOCK_PERIOD,	
-	.rampinfo=&cardpath_ramp_info,
+	.mmio_base = (void *)0x30301000,
+	.timer_index = 0,
+	.clock_period = 10,	//ns. Freq=100M,
 	.fpga_irq_mask = 0x02,
 	.fabric_irq = 1,
-	.pullin_speed = CARDPATH_STEPMOTOR_PULLIN_SPEED
-};
-		
-struct steppermotor steppermotor_list[] = {
-	{
-		.resource = &motor_scan_rc,
-		.install = fpga_stepmotor_install,
-		.callback = NULL
-	}
+	.preload_max = FPGA_TIMER_PRELOAD_MAX
 };
 
+static struct fpga_timer fpga_timer1 =
+{
+	.resource = &fpga_timer1_rc,
+};
 
-const int steppermotor_num = DEVICE_COUNT(steppermotor);
+static struct fpga_stepmotor_driver_resource steppermotor_1_rc =
+{
+	.mmio_base=(void *)0x30300000,
+	.pfpga_stepmotor_timer = &fpga_timer1,
+	.select = 1,
+	.stepping_mode=STEP_MODE_HALF,
+	.rampinfo=&passport_scanner_ramp_info,
+	.pullin_speed = 300,
+};
+
+struct steppermotor steppermotor_1 =
+{
+	.resource = &steppermotor_1_rc,
+	.install = fpga_stepmotor_driver_install,
+	.callback = NULL
+};
+
+struct steppermotor * steppermotor_list[] =
+{
+	&steppermotor_1,
+};
+
+const int steppermotor_num = (sizeof(steppermotor_list)/sizeof(struct steppermotor *));
 
 /* scanunit configuration */
 /* scanunit afe device definition */
@@ -304,6 +259,9 @@ static const struct fpga_cis_resource check_cis_a_rc = {
 };
 
 /* define scanunit hardware information */
+const int digitisers_num = 1;
+const int imagesensors_num = 1;
+
 struct scanunit checkscanner = {
 
 		// check  scanunit
@@ -337,138 +295,32 @@ struct scanunit checkscanner = {
 		},
 		.afe_info ={
 			.flag_en = 1,
+			.outdataen = 0,
 			.master_mode_en = 0,
 			.flagsig_sel = AFE_B4_SEL_FLAG_FLAGPIX,
-			.linelength = 4032,
-			.flagpixlen = 63,
+			.linelength = 3024,
+			.flagpixlen = 56, //56-719, 83-718
 			.pllctrl1 = 0x00,
 			.pllctrl2 = 0x09,
-			.pll_exdiv_sel = AFE_1C_PLLEXDIV_SEL_1,
+			.pll_exdiv_sel = 0,
 			.dllconfig1 = 0x20,
 			.dllconfig2 = 0x10,
 		},
 };
 
 //-----------------------------------------------------------------
-static struct motor_data	mechunit_cardpath_motor_data[]={
-	{
-	.motor_mask=CARDPATH_MOTOR_MASK,
-	//.motor_name="motor_cardpath",
-	.motor_dev={
-		.psteppermotor=&steppermotor_list[0],
-	},
-	.motor_type=STEPPERMOTOR
-	}
-};
 
-#ifdef IC61S
-#define CARDPATH_MECHUNIT_SENSOR_NUM	5
-#endif
-#ifdef IC62S_4M
-#define CARDPATH_MECHUNIT_SENSOR_NUM	4
-#endif
-#define CARDPATH_MECHUNIT_MOTOR_NUM     1
-
-static struct sensor_data mechunit_cardpath_sensor_data[CARDPATH_MECHUNIT_SENSOR_NUM]={
-	{	
-		.sen_mask=CARDPATH_CD_SENSOR_MASK, 
-		//.sen_name="sen_card_detect",  
-		.sen_dev={
-			.pphotosensor=&photosensor_list[0]
-		}
-	},
-	{	
-		.sen_mask=CARDPATH_CS0_SENSOR_MASK, 
-		//.sen_name="sen_card_read",  
-		.sen_dev={
-			.pphotosensor=&photosensor_list[1]
-		}
-	},
-	{	
-		.sen_mask=CARDPATH_CS1_SENSOR_MASK, 
-		//.sen_name="sen_card_scan",  
-		.sen_dev={
-			.pphotosensor=&photosensor_list[2]
-		}
-	},
-	#ifdef IC61S
-	{	
-		.sen_mask=CARDPATH_CS2_SENSOR_MASK, 
-		//.sen_name="sen_card_scanend",  
-		.sen_dev={
-			.pphotosensor=&photosensor_list[3]
-		}
-	},
-	
-	{	
-		.sen_mask=CARDPATH_COVER_SENSOR_MASK, 
-		//.sen_name="sen_card_cover",  
-		.sen_dev={
-			.pphotosensor=&photosensor_list[4]
-		}
-	},
-	#endif
-
-	#ifdef IC62S
-	{	
-		.sen_mask=CARDPATH_COVER_SENSOR_MASK, 
-		//.sen_name="sen_card_cover",  
-		.sen_dev={
-			.pphotosensor=&photosensor_list[3]
-		}
-	},
-	#endif
-};
-
-sen_config_t  mech_cardpath_sensor_config[CARDPATH_MECHUNIT_SENSOR_NUM];
-sen_feature_t mech_cardpath_sensor_feature[CARDPATH_MECHUNIT_SENSOR_NUM];
-sen_raw_input_t mech_cardpath_sensor_rawinput[CARDPATH_MECHUNIT_SENSOR_NUM];
-motor_feature_t mech_cardpath_motor_feature[CARDPATH_MECHUNIT_MOTOR_NUM];
-
-struct mechanism_dev_t mechnism_cardpath_dev={
-	.mech_unit_data={
-		//.mech_unit_name = "mechunit_cardpath",
-		.unit_motor_data={
-			.motor_num = CARDPATH_MECHUNIT_MOTOR_NUM,
-			.motor = mechunit_cardpath_motor_data,
-			
-		},
-		.bmotor_filled = 1,
-		.unit_sensor_data={
-			.sensor_num=CARDPATH_MECHUNIT_SENSOR_NUM,
-			.sensor = mechunit_cardpath_sensor_data,
-			.sensor_masks = CARDSCANNER_ALL_SENSORS_MASK,
-		},
-		.bsensor_filled = 1
-	},
-	.mech_unit_control={
-		.mech_unit_sen_feature={
-			.sen_num=CARDPATH_MECHUNIT_SENSOR_NUM,
-			.sen_feature=mech_cardpath_sensor_feature
-			},
-		.mech_unit_sen_config={
-			.sen_num=CARDPATH_MECHUNIT_SENSOR_NUM,
-			.sen_config=mech_cardpath_sensor_config
-			},
-		.mech_unit_sen_raw_input={
-			.sen_num=CARDPATH_MECHUNIT_SENSOR_NUM,
-			.sen_raw_input=mech_cardpath_sensor_rawinput
-			},
-		.mech_unit_motor_feature={
-			.motor_num = CARDPATH_MECHUNIT_MOTOR_NUM,
-			.motor_feature = mech_cardpath_motor_feature
-			},
-	}
-};
 
 //-----------------------------------------------------------------
 struct gpiokey_resource force_card_eject_rc={NULL, MSS_GPIO_0, GPIOKEY_TYPE_LEVEL_LOW};
-
-struct gpiokey gpiokey_list[]={
-  {
-  	.resource = &force_card_eject_rc,
+struct gpiokey eject_key =
+{
+	.resource = &force_card_eject_rc,
 	.install = gpiokey_install,
-  },
+};
+
+struct gpiokey * gpiokey_list[]={
+	&eject_key,
 };
 
 const int gpiokey_num = DEVICE_COUNT(gpiokey);
@@ -493,21 +345,33 @@ static int board_install_devices()
 
 	socnvm_drvinit();
 	rs = nvram_install_devices();
+	if(rs)
+		return -1;
 
 	rs = fpga_install(&fpga_rc);
-
+	if(rs)
+		return -1;
 	rs = gpiokey_install_devices();
+	if(rs)
+		return -1;
 	
-//	gpio_photosensor_drvinit();
-//	rs = photosensor_install_devices();
-//
-//	fpga_stepmotor_drvinit();
-//	rs = steppermotor_install_devices();
-	
+	rs = simplesensor_install_devices();
+	if(rs)
+		return -1;
+
+	rs = photosensor_install_devices();
+	if(rs)
+		return -1;
+
+	rs = steppermotor_install_devices();
+	if(rs)
+		return -1;
 	fpga_cis_drvinit();
 	wm8235_drvinit();
 
 	rs = scanunit_install(&checkscanner);
+	if(rs)
+		return -1;
 
 	return rs;
 }

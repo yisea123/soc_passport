@@ -30,6 +30,19 @@ struct irqcallback_entry fabric_irqcallbacks[] = {
 #define FABRIC_IRQCALLBACK_NUM	(sizeof(fabric_irqcallbacks)/sizeof(struct irqcallback_entry))
 
 /* MSS GPIO Interrupt IRQHandlers */
+
+void GPIO3_IRQHandler( void )
+{
+	MSS_GPIO_IrqCallback(3);
+	MSS_GPIO_clear_irq(MSS_GPIO_3);
+}
+
+void GPIO4_IRQHandler( void )
+{
+	MSS_GPIO_IrqCallback(4);
+	MSS_GPIO_clear_irq(MSS_GPIO_4);
+}
+
 void GPIO8_IRQHandler( void )
 {
 	MSS_GPIO_IrqCallback(8);
